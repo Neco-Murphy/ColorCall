@@ -1,0 +1,74 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Call The Color</title>
+</head>
+<body>
+	<script src="bower_components/jquery/jquery.js"></script>
+	<script src="bower_components/underscore/underscore.js"></script>
+	<script src="bower_components/backbone/backbone.js"></script>
+	<script src='js/jquery.knob.min.js'></script>
+	
+	
+	<link rel="stylesheet" type="text/css" href="styles/styles.css">
+	<link href='http://fonts.googleapis.com/css?family=Bevan' rel='stylesheet' type='text/css'>
+
+
+	<div class="menu">
+		<div class=result></div>
+		<button class='start'>start</button>
+		<input type="text" value="75" class="dial count">
+	</div>	
+	<div class="playContainer"></div>
+
+	<script src="models/ColorButtonModel.js"></script>
+	<script src="models/AppModel.js"></script>
+	<script src="collections/Buttons.js"></script>
+	<script src="views/ColorButtonView.js"></script>
+	<script src="views/ButtonsView.js"></script>
+	<script src="views/QuizView.js"></script>
+	<script src="views/AppView.js"></script>
+	<script>
+		$(function(){
+
+			// show timer
+			$(".dial").knob({
+				'width': 140,
+				'thickness': .3,
+				// 'readOnly': true, 
+    		'max': 60,
+    		'fgColor': "#ff003c",
+    		'bgColor': "#2E2E2E",
+    		'displayPrevious': true,
+			});
+
+			//countdown
+			var time = 60;
+			var countdown = function(){
+				$('.dial').val(time).trigger('change');
+				time--;
+				if(time >= 0){
+					setTimeout(countdown, 1000);
+				}
+			};
+			countdown();
+			
+			var app = new AppModel();
+			var appView = new AppView({'model': app});
+			$('.playContainer').append(appView.render());
+
+			//checking the key input
+			$(document).keydown(function(e){
+			  var code = e.keyCode ? e.keyCode : e.which;
+			  //d:68, f:70, j:74, k:75, l:76
+			  var inputColor = (code == 68) ? 'red': ((code == 70) ? 'blue' : ((code == 74) ? 'green' : ((code == 75) ? 'yellow' : ((code == 76) ? 'purple' : undefined ))));
+				if(inputColor){
+					appView.showResult(inputColor);
+				  appView.nextColor();
+				}
+			});
+		});
+	</script>
+	
+</body>
+</html>
