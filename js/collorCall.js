@@ -8,13 +8,13 @@ $(function(){
 	$(".dial").knob({
 		'width': 140,
 		'thickness': .3,
-		'readOnly': true, 
+		'readOnly': true,
 		'max': 20,
 		'fgColor': "#ff003c",
 		'bgColor': "#2E2E2E",
 		'displayPrevious': true,
 	});
-	
+
 	var app = new AppModel();
 	//hide the quiz element first
 	app.get('quiz').$el.addClass('hidden');
@@ -53,20 +53,23 @@ $(function(){
 	  			//compare current score with the best score
 	  			var currentScore = $('.score').text();
 	  			$('.score').text(0);
-	  			if(bestScore < currentScore){ $('.bestScore').text(currentScore) };
+	  			if(bestScore < currentScore){
+	  				bestScore = currentScore;
+	  				$('.bestScore').text(bestScore);
+	  		  }
 	  			//change the counting status
 	  			counting = false;
 	  		}
 	  	};
 	  	countdown();
-	  	
+
 	  } else if (counting) {
 		  //if its the home row keys, check the match (d:68, f:70, j:74, k:75, l:76)
 		  var inputColor = (code == 68) ? 'red': ((code == 70) ? 'blue' : ((code == 74) ? 'green' : ((code == 75) ? 'yellow' : ((code == 76) ? 'purple' : undefined ))));
 			if(inputColor){
 				appView.showResult(inputColor);
 			  appView.nextColor();
-			} 	
+			}
 	  }
 	});
 });
