@@ -40,7 +40,7 @@ $(function(){
 	  	//show quiz element
 	  	app.get('quiz').$el.removeClass('hidden');
 	  	counting = true;
-	  	var time = 30;
+	  	var time = 20;
 	  	var countdown = function(){
 	  		$('.dial').val(time).trigger('change');
 	  		time--;
