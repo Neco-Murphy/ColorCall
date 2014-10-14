@@ -1,6 +1,6 @@
 var AppModel = Backbone.Model.extend({
+	//app model has colors, buttons, quiz
 	initialize: function(){
-		console.log('initializing the app..');
 		//define colors
 		this.set('colors', ['red', 'blue', 'green', 'yellow', 'purple']);
 		this.setColor();

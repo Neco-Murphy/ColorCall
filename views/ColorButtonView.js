@@ -11,7 +11,7 @@ var ColorButtonView = Backbone.View.extend({
 	initialize: function(){
 		//listen to the change of the attribute clicked. when changed, add class of selected
 		this.model.on('change', function(){
-			this.$el.addClass('selected');
+			this.$el.toggleClass('selected');
 		}, this);
 	},
 

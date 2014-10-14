@@ -2,6 +2,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Call The Color</title>
+	<link rel="shortcut icon" type="image/icon" href="styles/neco.ico"/>
+	<link rel="apple-touch-icon" href="styles/neco.gif">
 </head>
 <body>
 	<script src="bower_components/jquery/jquery.js"></script>
@@ -15,60 +17,28 @@
 
 
 	<div class="menu">
-		<div class=result></div>
-		<button class='start'>start</button>
+		<button class='start metal'>start</button>
 		<input type="text" value="75" class="dial count">
+		<div class="scoreBoard">
+			<p class='username'>User: </p>
+			<p>Best Score: <span class='bestScore'>0</span></p>
+			<p>Score: <span class='score'>0</span></p>
+		</div>
 	</div>	
+	<div class="messageContainer"></div>
 	<div class="playContainer"></div>
 
 	<script src="models/ColorButtonModel.js"></script>
 	<script src="models/AppModel.js"></script>
+	<!-- <script src="models/MenuModel.js"></script> -->
+	<script src="views/MessageView.js"></script>
 	<script src="collections/Buttons.js"></script>
 	<script src="views/ColorButtonView.js"></script>
 	<script src="views/ButtonsView.js"></script>
 	<script src="views/QuizView.js"></script>
 	<script src="views/AppView.js"></script>
-	<script>
-		$(function(){
-
-			// show timer
-			$(".dial").knob({
-				'width': 140,
-				'thickness': .3,
-				// 'readOnly': true, 
-    		'max': 60,
-    		'fgColor': "#ff003c",
-    		'bgColor': "#2E2E2E",
-    		'displayPrevious': true,
-			});
-
-			//countdown
-			var time = 60;
-			var countdown = function(){
-				$('.dial').val(time).trigger('change');
-				time--;
-				if(time >= 0){
-					setTimeout(countdown, 1000);
-				}
-			};
-			countdown();
-			
-			var app = new AppModel();
-			var appView = new AppView({'model': app});
-			$('.playContainer').append(appView.render());
-
-			//checking the key input
-			$(document).keydown(function(e){
-			  var code = e.keyCode ? e.keyCode : e.which;
-			  //d:68, f:70, j:74, k:75, l:76
-			  var inputColor = (code == 68) ? 'red': ((code == 70) ? 'blue' : ((code == 74) ? 'green' : ((code == 75) ? 'yellow' : ((code == 76) ? 'purple' : undefined ))));
-				if(inputColor){
-					appView.showResult(inputColor);
-				  appView.nextColor();
-				}
-			});
-		});
-	</script>
+	<script src="js/collorCall.js"></script>
+	<!-- <script src="views/MenuView.js"></script> -->
 	
 </body>
 </html>

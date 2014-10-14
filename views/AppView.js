@@ -12,6 +12,7 @@ var AppView = Backbone.View.extend({
 
 	render: function(){
 		this.$el.children().detach();
+		var $message = $('h1').addClass('message');
 		var $quiz = this.model.get('quiz').$el;
 		return this.$el.html([$quiz, this.buttonsView.$el]);
 	},
@@ -20,10 +21,22 @@ var AppView = Backbone.View.extend({
 		//change the background color of the selected button
 		var selectedButton = this.model.get('buttons').where({color: color})[0];
 		selectedButton.set('clicked', true);
-		//checkTheMatch returns true/false and the line below sets the message
-		var message = this.model.checkTheMatch(color) ? 'colors matched!' : 'Booooooooo!!!!';
-		
-		alert(message);
+		setTimeout(function(){
+			selectedButton.set('clicked', false);
+		}, 300);
+		//checkTheMatch returns true/false. with the boolean it sets the message and score
+		var score = $('.score').text();
+		if( this.model.checkTheMatch(color) ){
+			$('.message').text('colors matched!');
+			score++;
+		}else{
+			$('.message').text('Booooooooo!!!!');
+			score--;
+		}
+		$('.score').text(score);
+		setTimeout(function(){
+			$('.message').text('');
+		},500);
 	},
 
 	nextColor: function(){
