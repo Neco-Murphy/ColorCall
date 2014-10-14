@@ -1,5 +1,5 @@
 var fb = new Firebase('https://colorcall.firebaseio.com/');
-var timeLimit = 20;
+var timeLimit = 20; //change the timeLimit of line 92 as well
 var username;
 var bestScore = 0;
 var foundUser = false;
@@ -37,10 +37,7 @@ var LoginUser = function(username){
 				bestScore = personalData.bestscore;
 			}
 		};
-		//if it didnt exist set the bestscore to 0 and save the userinfo
-		if(!foundUser){
-			fb.push({'username': username, 'bestscore': bestScore });
-		}
+		
 		//show bestscore
 		$('.bestScore').text(bestScore);
 	}, function (errorObject) {
@@ -81,7 +78,8 @@ $(function(){
 			//compare current score with the best score
 			var currentScore = $('.score').text();
 			$('.score').text(0);
-			console.log(bestScore, currentScore)
+
+			//check the score
 			if(bestScore < currentScore){
 				bestScore = currentScore;
 				$('.bestScore').text(bestScore);
@@ -91,6 +89,7 @@ $(function(){
 		  }
 			//change the counting status
 			counting = false;
+			timeLimit = 20;
 	};
 
 	//checking the key input
