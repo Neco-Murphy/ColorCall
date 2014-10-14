@@ -1,35 +1,97 @@
-$(function(){
-	//ask username and save it
-	var username = prompt('Enter your username.');
-	username ? username : '';
-	$('.username').text('User: ' + username);
+var fb = new Firebase('https://ozttl0bu9x5.firebaseio-demo.com/');
+var timeLimit = 20;
+var username;
+var bestScore = 0;
+var foundUser = false;
+var counting = false;
 
-	// show timer
+var showTimer = function(){
 	$(".dial").knob({
 		'width': 140,
 		'thickness': .3,
 		'readOnly': true,
-		'max': 20,
+		'max': timeLimit,
 		'fgColor': "#ff003c",
 		'bgColor': "#2E2E2E",
 		'displayPrevious': true,
-	});
+	})
+};
 
+var askUsername = function(){
+	username = prompt('Enter your username.');
+	if(username){
+		LoginUser(username);
+		$('.username').text('User: ' + username);	
+	}
+};
+
+var LoginUser = function(username){
+	fb.on('value', function (snapshot) {
+		//check if the user exists
+		var wholedata = snapshot.val();
+		for(var data in wholedata){
+			var personalData = wholedata[data];
+			//if yes, retrieve the best score
+			if( username === personalData.username ){
+				foundUser = true;
+				bestScore = personalData.bestscore;
+			}
+		};
+		//if it didnt exist set the bestscore to 0 and save the userinfo
+		if(!foundUser){
+			fb.push({'username': username, 'bestscore': bestScore });
+		}
+		//show bestscore
+		$('.bestScore').text(bestScore);
+	}, function (errorObject) {
+	  console.log('The read failed: ' + errorObject.code);
+	});
+}
+
+
+$(function(){
+	
+	askUsername();
+	showTimer();
+
+	//show playfield
 	var app = new AppModel();
 	//hide the quiz element first
 	app.get('quiz').$el.addClass('hidden');
 	var appView = new AppView({'model': app});
 	$('.playContainer').append(appView.render());
-
-	// var menu = new MenuModel();
-	// var menuView = new MenuView({'model': menu});
-	// $('.menu').append(menuView.render());
-
+	//show message
 	var messageView = new MessageView();
 	$('.messageContainer').append(messageView.render());
 
-	var bestScore = 0;
-	var counting = false;
+	var countdown = function(){
+		$('.dial').val(timeLimit).trigger('change');
+		timeLimit--;
+		if(timeLimit >= 0){
+			setTimeout(countdown, 1000);
+		} else if(timeLimit === -1){
+			endCountdown();
+		}
+	};
+
+	var endCountdown = function(){
+	//when time is up, remove the clicked class from the start button and hide quiz element
+			$('.start').removeClass('clicked');
+			app.get('quiz').$el.addClass('hidden');
+			//compare current score with the best score
+			var currentScore = $('.score').text();
+			$('.score').text(0);
+			console.log(bestScore, currentScore)
+			if(bestScore < currentScore){
+				bestScore = currentScore;
+				$('.bestScore').text(bestScore);
+				if(username){
+					fb.push({'username': username, 'bestscore': bestScore });
+				}
+		  }
+			//change the counting status
+			counting = false;
+	};
 
 	//checking the key input
 	$(document).keydown(function(e){
@@ -40,27 +102,6 @@ $(function(){
 	  	//show quiz element
 	  	app.get('quiz').$el.removeClass('hidden');
 	  	counting = true;
-	  	var time = 20;
-	  	var countdown = function(){
-	  		$('.dial').val(time).trigger('change');
-	  		time--;
-	  		if(time >= 0){
-	  			setTimeout(countdown, 1000);
-	  		} else if(time === -1){
-	  			//when time is up, remove the clicked class from the start button and hide quiz element
-	  			$('.start').removeClass('clicked');
-	  			app.get('quiz').$el.addClass('hidden');
-	  			//compare current score with the best score
-	  			var currentScore = $('.score').text();
-	  			$('.score').text(0);
-	  			if(bestScore < currentScore){
-	  				bestScore = currentScore;
-	  				$('.bestScore').text(bestScore);
-	  		  }
-	  			//change the counting status
-	  			counting = false;
-	  		}
-	  	};
 	  	countdown();
 
 	  } else if (counting) {
