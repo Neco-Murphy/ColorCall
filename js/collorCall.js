@@ -1,4 +1,4 @@
-var fb = new Firebase('https://ozttl0bu9x5.firebaseio-demo.com/');
+var fb = new Firebase('https://colorcall.firebaseio.com/');
 var timeLimit = 20;
 var username;
 var bestScore = 0;
@@ -114,3 +114,6 @@ $(function(){
 	  }
 	});
 });
+
+
+// need to revise the bestscore, not pushing...
