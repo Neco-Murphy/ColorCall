@@ -1,5 +1,5 @@
 var fb = new Firebase('https://colorcall.firebaseio.com/');
-var timeLimit = 5; //change the timeLimit of line 92 as well
+var timeLimit = 15; //change the timeLimit of line 92 as well
 var username;
 var bestScore = 0;
 var foundUser = false;
@@ -36,7 +36,7 @@ var LoginUser = function(username){
 			if( username === personalData.username ){
 				foundUser = true;
 				locationInFb = data;
-				bestScore = personalData.bestscore;
+				bestScore = parseInt(personalData.bestscore);
 			}
 		};
 		
@@ -96,7 +96,7 @@ $(function(){
 		  }
 			//change the counting status
 			counting = false;
-			timeLimit = 5;
+			timeLimit = 15;
 	};
 
 	//checking the key input
