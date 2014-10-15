@@ -79,7 +79,6 @@ $(function(){
 			app.get('quiz').$el.addClass('hidden');
 			//compare current score with the best score
 			var currentScore = $('.score').text();
-			$('.score').text(0);
 
 			//check the score
 			if(bestScore < currentScore){
@@ -107,6 +106,7 @@ $(function(){
 	  	$('.start').addClass('clicked');
 	  	//show quiz element
 	  	app.get('quiz').$el.removeClass('hidden');
+	  	$('.score').text(0);	
 	  	counting = true;
 	  	countdown();
 
