@@ -1,9 +1,10 @@
 var fb = new Firebase('https://colorcall.firebaseio.com/');
-var timeLimit = 20; //change the timeLimit of line 92 as well
+var timeLimit = 5; //change the timeLimit of line 92 as well
 var username;
 var bestScore = 0;
 var foundUser = false;
 var counting = false;
+var locationInFb;
 
 var showTimer = function(){
 	$(".dial").knob({
@@ -34,6 +35,7 @@ var LoginUser = function(username){
 			//if yes, retrieve the best score
 			if( username === personalData.username ){
 				foundUser = true;
+				locationInFb = data;
 				bestScore = personalData.bestscore;
 			}
 		};
@@ -83,13 +85,18 @@ $(function(){
 			if(bestScore < currentScore){
 				bestScore = currentScore;
 				$('.bestScore').text(bestScore);
+				//add bestScore
 				if(username){
-					fb.push({'username': username, 'bestscore': bestScore });
+					if(locationInFb){
+						fb.child(locationInFb).set( { username: username, bestscore: bestScore } );
+					}else{
+						fb.push({ username: username, bestscore: bestScore });
+					}
 				}
 		  }
 			//change the counting status
 			counting = false;
-			timeLimit = 20;
+			timeLimit = 5;
 	};
 
 	//checking the key input
@@ -114,5 +121,3 @@ $(function(){
 	});
 });
 
-
-// need to revise the bestscore, not pushing...
