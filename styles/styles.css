@@ -11,7 +11,7 @@ background-repeat: repeat;
 
 .menu{
 	width: 20%;
-	height: 430px;
+	height: 80%;
 	float: left;
 	margin-left: 60px; 
 	margin-top: 50px;
@@ -74,7 +74,7 @@ span{
 
 .messageContainer{
 	width: 55%;
-	height: 120px;
+	height: 20%;
 	float: left;
 	margin-top: 50px;
 	margin-left: 120px;
@@ -108,6 +108,7 @@ span{
 
 .playContainer{
 	width: 55%;
+	height: 60%;
 	float: left;
 	margin-top: 50px;
 	margin-left: 120px;
@@ -187,6 +188,7 @@ h1.purple {
 ul{
 	list-style: none;
 	margin-left: -20px;
+	text-align: center;
 }
 
 .color{
