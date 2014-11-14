@@ -35,7 +35,7 @@ var AppView = Backbone.View.extend({
 		}
 		$('.score').text(score);
 		setTimeout(function(){
-			$('.message').text('');
+			$('.message').text();
 		},500);
 	},
 

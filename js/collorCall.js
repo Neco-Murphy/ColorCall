@@ -5,6 +5,7 @@ var bestScore = 0;
 var foundUser = false;
 var counting = false;
 var locationInFb;
+var playing = false;
 
 var showTimer = function(){
 	$(".dial").knob({
@@ -47,7 +48,13 @@ var LoginUser = function(username){
 	});
 }
 
-
+var explainTheGame = function(){
+	confirm(
+		'Once the game starts, you will see the letters below.\nMatch the color of the letters by pressing the corresponding key on the keyboard.'
+	);
+	$('.message').text('Press enter to start!');
+}
+	
 $(function(){
 	
 	askUsername();
@@ -63,6 +70,12 @@ $(function(){
 	var messageView = new MessageView();
 	$('.messageContainer').append(messageView.render());
 
+	explainTheGame();
+	
+
+//================HELPER FUNCTIONS FOR THE COUNTER===============================
+
+
 	var countdown = function(){
 		$('.dial').val(timeLimit).trigger('change');
 		timeLimit--;
@@ -75,38 +88,48 @@ $(function(){
 
 	var endCountdown = function(){
 	//when time is up, remove the clicked class from the start button and hide quiz element
-			$('.start').removeClass('clicked');
-			app.get('quiz').$el.addClass('hidden');
-			//compare current score with the best score
-			var currentScore = $('.score').text();
+		$('.start').removeClass('clicked');
+		app.get('quiz').$el.addClass('hidden');
+		//compare current score with the best score
+		var currentScore = $('.score').text();
 
-			//check the score
-			if(bestScore < currentScore){
-				bestScore = currentScore;
-				$('.bestScore').text(bestScore);
-				//add bestScore
-				if(username){
-					if(locationInFb){
-						fb.child(locationInFb).set( { username: username, bestscore: bestScore } );
-					}else{
-						fb.push({ username: username, bestscore: bestScore });
-					}
+		//check the score
+		if(bestScore < currentScore){
+			bestScore = currentScore;
+			$('.bestScore').text(bestScore);
+			//add bestScore
+			if(username){
+				if(locationInFb){
+					fb.child(locationInFb).set( { username: username, bestscore: bestScore } );
+				}else{
+					fb.push({ username: username, bestscore: bestScore });
 				}
-		  }
-			//change the counting status
-			counting = false;
-			timeLimit = 15;
+			}
+	  }
+		//show the explanation
+		setTimeout(function(){
+			$('.message').text('Press enter to play again!');
+		}, 2000);
+	  //change the playing status
+		playing = false;
+		//change the counting status
+		counting = false;
+		timeLimit = 15;
 	};
 
-	//checking the key input
+//===================KEY_INPUT LISTENER=============================
+
 	$(document).keydown(function(e){
 	  var code = e.keyCode ? e.keyCode : e.which;
 	  // if its enter, the game starts
-	  if(code == 13){
+	  if(code == 13 && !playing){
+	  	console.log('clicked enter!')
+	  	$('.message').text('');
 	  	$('.start').addClass('clicked');
 	  	//show quiz element
 	  	app.get('quiz').$el.removeClass('hidden');
 	  	$('.score').text(0);	
+	  	playing = true;
 	  	counting = true;
 	  	countdown();
 
