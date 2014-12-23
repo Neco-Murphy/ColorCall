@@ -49,7 +49,7 @@ var LoginUser = function(username){
 }
 
 var explainTheGame = function(){
-	confirm(
+	alert(
 		'Once the game starts, you will see the letters below.\nMatch the color of the letters by pressing the corresponding key on the keyboard.'
 	);
 	$('.message').text('Press enter to start!');
